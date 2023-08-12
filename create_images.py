@@ -1,6 +1,7 @@
 """
 author: @cesarasa
 """
+import pandas as pd
 
 from rdkit import Chem, DataStructs
 from rdkit.Chem import Draw, AllChem
@@ -40,9 +41,9 @@ def draw_AC_images(smiles_compound_1 = None,
     elif smiles_compound_2 is None:
         activities = new_client.activity.filter(molecule_chembl_id__in=pChEMBL_compound_2)
         smiles_compound_2 = activities[0]['canonical_smiles']
-    elif ~pChEMBL_compound_1:
+    elif pChEMBL_compound_1 is None:
         print('Please provide a ChEMBL ID for compound 1')
-    elif ~pChEMBL_compound_2:
+    elif pChEMBL_compound_2 is None:
         print('Please provide a ChEMBL ID for compound 2')
 
     mol1 = Chem.MolFromSmiles(smiles_compound_1)
@@ -91,3 +92,43 @@ def draw_AC_images(smiles_compound_1 = None,
     img.save(f'images/{pChEMBL_compound_1}_{pChEMBL_compound_2}.png')
 
     return None
+
+def main(second = 2):
+    """
+    Code to test the function. 
+    """
+    df = pd.read_csv('data_cp.csv')
+
+    # first_compound = df['Smiles'][0]
+
+    # Compare the first compound with the rest of the compounds
+    # tanimoto_similarity = []
+    # for i in range(1, len(df)):
+    #     tanimoto_similarity.append(DataStructs.FingerprintSimilarity(Chem.RDKFingerprint(Chem.MolFromSmiles(first_compound)), 
+    # Chem.RDKFingerprint(Chem.MolFromSmiles(df['Smiles'][i]))))
+
+    # # Build the Dataframe
+    # df_tanimoto = pd.DataFrame({'Smiles': df['Smiles'][1:], 'Tanimoto': tanimoto_similarity})
+
+    # # Get only the compounds with a Tanimoto similarity greater than 0.9
+    # df_tanimoto = df_tanimoto[df_tanimoto['Tanimoto'] > 0.9]
+
+    smiles_compound_1 = df.Smiles[0]
+    smiles_compound_2 = df.Smiles[second]
+    pK_compound_1 = df['pChEMBL Value'][0]
+    pK_compound_2 = df['pChEMBL Value'][second]
+    pChEMBL_compound_1 = df['Compound_ID'][0]
+    pChEMBL_compound_2 = df['Compound_ID'][second]
+
+    draw_AC_images(smiles_compound_1, 
+                smiles_compound_2, 
+                pK_compound_1,
+                pK_compound_2,
+                pChEMBL_compound_1,
+                pChEMBL_compound_2)
+    
+    print('Image created')
+    return None
+
+if __name__ == "__main__":
+    main()
