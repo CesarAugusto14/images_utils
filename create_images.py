@@ -35,17 +35,18 @@ def draw_AC_images(smiles_compound_1 = None,
     - It puts the compound IDs on top
     - It saves the image in the images folder
     """
-    if smiles_compound_1 is None:
-        activities = new_client.activity.filter(molecule_chembl_id__in=pChEMBL_compound_1)
+    if smiles_compound_1 is None or smiles_compound_2 is None:
+        from chembl_webresource_client.new_client import new_client
+        activities = new_client.activity.filter(molecule_chembl_id__in=(pChEMBL_compound_1, pChEMBL_compound_2))
         smiles_compound_1 = activities[0]['canonical_smiles']
-    elif smiles_compound_2 is None:
-        activities = new_client.activity.filter(molecule_chembl_id__in=pChEMBL_compound_2)
-        smiles_compound_2 = activities[0]['canonical_smiles']
+        # activities2 = new_client.activity.filter(molecule_chembl_id__in= pChEMBL_compound_2)
+        smiles_compound_2 = activities[1]['canonical_smiles']
     elif pChEMBL_compound_1 is None:
         print('Please provide a ChEMBL ID for compound 1')
     elif pChEMBL_compound_2 is None:
         print('Please provide a ChEMBL ID for compound 2')
 
+    print(smiles_compound_1, smiles_compound_2, pK_compound_1, pK_compound_2, pChEMBL_compound_1, pChEMBL_compound_2)
     mol1 = Chem.MolFromSmiles(smiles_compound_1)
     mol2 = Chem.MolFromSmiles(smiles_compound_2)
     img1 = Draw.MolToImage(mol1, size=(500, 500))
