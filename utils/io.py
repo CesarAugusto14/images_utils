@@ -39,6 +39,10 @@ def read_df(path: str, convert_index=True) -> pd.DataFrame:
     return df
 
 def data(cwd):
+
+    """
+    Reading the data.
+    """
     f_list = [pj(cwd, x) for x in os.listdir(cwd)]
 
     # In the raw data we have the metadata, the SMILES and the information of the compounds (including target)

@@ -45,3 +45,7 @@ plt.ylabel("MDS2")
 plt.show()
 # NOTE: As I am going to use the same code for other targets & other dim reduction 
 # methods, I will save this into a function. (Later)
+
+#%%
+
+# NOTE: How can I perform the dimensionality reduction if I just have the precoputed distances?
